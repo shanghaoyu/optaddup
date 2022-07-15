@@ -1,0 +1,23 @@
+GF = gfortran
+object = n2lo5001.o N2LOFUN1opt.o phases-n2lo1opt2.o 
+# generate two execute files
+all:SA.exe phase.exe
+.PHONY :all
+
+# SA.exe
+SA.exe: SAphase.o
+	$(GF) -o SA.exe SAphase.o
+SAphase.o phase.mod:SAphase.f
+	$(GF) -c SAphase.f
+# phase.exe
+phase.exe: $(object) 
+	$(GF) -o phase.exe $(object)
+n2lo5001.o: n2lo5001.f
+	$(GF) -c n2lo5001.f
+phases-n2lo1opt2.o: phases-n2lo1opt2.f phasecal.mod
+	$(GF) -c phases-n2lo1opt2.f
+N2LOFUN1opt.o phasecal.mod: N2LOFUN1opt.f
+	$(GF) -c N2LOFUN1opt.f
+.PHONY :clean
+clean:
+	del *.exe *.o *.mod
